@@ -43,20 +43,15 @@ communs, synchronisés entre deux appareils via un simple code de couple.
 | 13 | PR finale ouverte ; Pages activé (site en ligne) ; secrets Actions Supabase à créer | [~] secrets en attente | — |
 
 ## PROCHAINE ACTION
-Dès que les secrets Actions `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` existent (créés par
-Benjamin via `npm run secrets:github` ou l'interface GitHub), pousser un commit ou attendre le
-prochain run, vérifier que « Mon profil » sur https://benjamindecaillet.github.io/baby-name-quest/
-affiche « synchronisés entre vos appareils », puis tester avec deux navigateurs et le même code de
-couple qu'un « j'aime » apparaît de l'autre côté sans rechargement. Consigner le résultat ici.
+Après fusion de la PR « ci(pages): deploy only from main », vérifier que le bundle en ligne
+embarque l'URL Supabase (le hash de `assets/index-*.js` change), que « Mon profil » affiche
+« synchronisés entre vos appareils », puis tester avec deux navigateurs et le même code de couple.
+Consigner le résultat ici.
 
 ## BLOQUÉ / EN ATTENTE DE BENJAMIN
-- **Secrets Actions Supabase** : les clés sont dans le `.env` local de Benjamin (schéma SQL déjà
-  exécuté sur le projet Supabase) mais pas encore dans GitHub. L'intégration GitHub de
-  l'environnement de construction ne peut ni créer des secrets, ni relancer un workflow.
-  À faire : `npm run secrets:github` (token dans `%USERPROFILE%\.bnq\github-token`) ou
-  Settings → Secrets and variables → Actions.
-- Le bouton « Run workflow » n'apparaît dans l'onglet Actions qu'une fois le workflow présent sur
-  `main` (donc après fusion de la PR) ; d'ici là, tout push sur la branche déclenche la CI.
+- Fusionner la PR de la branche de travail : le déploiement Pages n'est autorisé que depuis `main`
+  (règle de protection de l'environnement `github-pages`), et les secrets Supabase (créés après la
+  fusion précédente) ne seront intégrés qu'au prochain build sur `main`.
 
 ## Journal
 - 2026-09-04 — Démarrage. Repo vide. Socle en cours (hygiène, hooks, commandes, skills, scaffold).
@@ -72,3 +67,6 @@ couple qu'un « j'aime » apparaît de l'autre côté sans rechargement. Consign
 - 2026-09-04 — GitHub Pages activé par Benjamin ; run 12 déployé, site en ligne
   (https://benjamindecaillet.github.io/baby-name-quest/, dataset et liens profonds vérifiés).
   Reste : secrets Supabase puis test de synchronisation.
+- 2026-09-04 — Secrets Supabase créés par Benjamin (vérifiés présents dans le build, run 18). Le
+  déploiement depuis la branche de travail est refusé par la protection d'environnement ; workflow
+  ajusté pour ne déployer que depuis `main`.

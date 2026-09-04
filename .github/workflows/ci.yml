@@ -49,7 +49,8 @@ jobs:
   deploy:
     name: Déploiement GitHub Pages
     needs: verify
-    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feat/baby-name-shortlist-app')
+    # L'environnement github-pages n'accepte que la branche main (règle de protection).
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
