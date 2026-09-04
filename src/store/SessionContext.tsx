@@ -264,6 +264,7 @@ export function SessionProvider({
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components -- hook and provider share one module on purpose
 export function useSession(): SessionContextValue {
   const context = useContext(SessionContext);
   if (!context) throw new Error('useSession must be used inside SessionProvider');
