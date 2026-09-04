@@ -40,24 +40,23 @@ communs, synchronisés entre deux appareils via un simple code de couple.
 | 10 | Realtime Supabase (broadcast) + branchement runtime — fait dans l'adapter ; reste : tester avec de vraies clés | [~] en attente des clés | 5c9fc01 |
 | 11 | CI GitHub Actions (verify + déploiement Pages, `enablement: true`) | [x] fait | 52d3a9b |
 | 12 | Polish mobile, accessibilité, README FR (installation Windows) | [x] fait | 2db072c, 6cf39d8 |
-| 13 | PR finale ouverte ; secrets Actions + activation Pages via API en attente du token | [~] PR ouverte | — |
+| 13 | PR finale ouverte ; Pages activé (site en ligne) ; secrets Actions Supabase à créer | [~] secrets en attente | — |
 
 ## PROCHAINE ACTION
-Dès que Benjamin a lancé `npm run pages:enable` (ou activé Pages à la main), relancer le workflow
-(Actions → CI → Run workflow sur `feat/baby-name-shortlist-app`) et vérifier
-https://benjamindecaillet.github.io/baby-name-quest/. Dès que les clés Supabase sont fournies :
-exécuter `supabase/schema.sql`, créer les secrets (`npm run secrets:github`), relancer le workflow,
-tester la synchronisation entre deux appareils avec le même code de couple, puis noter le résultat ici.
+Dès que les secrets Actions `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` existent (créés par
+Benjamin via `npm run secrets:github` ou l'interface GitHub), pousser un commit ou attendre le
+prochain run, vérifier que « Mon profil » sur https://benjamindecaillet.github.io/baby-name-quest/
+affiche « synchronisés entre vos appareils », puis tester avec deux navigateurs et le même code de
+couple qu'un « j'aime » apparaît de l'autre côté sans rechargement. Consigner le résultat ici.
 
 ## BLOQUÉ / EN ATTENTE DE BENJAMIN
-- **Activation de GitHub Pages** : le `GITHUB_TOKEN` du workflow ne peut pas créer le site Pages
-  (« Resource not accessible by integration », run 8). Le job de vérification est vert ; seul le
-  déploiement attend l'activation. Avec le token dans `%USERPROFILE%\.bnq\github-token` :
-  `npm run pages:enable`. Alternative manuelle : Settings → Pages → Source « GitHub Actions ».
-- **Clés Supabase** : URL du projet + clé anon (Dashboard → Project Settings → API). Puis
-  `supabase/schema.sql` dans SQL Editor, `.env` local, et `npm run secrets:github`.
-- **Token GitHub** : absent de l'environnement de construction ; l'API GitHub n'y est pas joignable
-  directement. Le push git et la création de PR passent par l'intégration de l'environnement.
+- **Secrets Actions Supabase** : les clés sont dans le `.env` local de Benjamin (schéma SQL déjà
+  exécuté sur le projet Supabase) mais pas encore dans GitHub. L'intégration GitHub de
+  l'environnement de construction ne peut ni créer des secrets, ni relancer un workflow.
+  À faire : `npm run secrets:github` (token dans `%USERPROFILE%\.bnq\github-token`) ou
+  Settings → Secrets and variables → Actions.
+- Le bouton « Run workflow » n'apparaît dans l'onglet Actions qu'une fois le workflow présent sur
+  `main` (donc après fusion de la PR) ; d'ici là, tout push sur la branche déclenche la CI.
 
 ## Journal
 - 2026-09-04 — Démarrage. Repo vide. Socle en cours (hygiène, hooks, commandes, skills, scaffold).
@@ -70,3 +69,6 @@ tester la synchronisation entre deux appareils avec le même code de couple, pui
 - 2026-09-04 — Polish mobile (swipe plein écran, défilement dans `main`, onglets), parcours complet
   vérifié dans Chromium en viewport iPhone (aucune erreur console). PR ouverte. En attente :
   activation Pages (token) et clés Supabase.
+- 2026-09-04 — GitHub Pages activé par Benjamin ; run 12 déployé, site en ligne
+  (https://benjamindecaillet.github.io/baby-name-quest/, dataset et liens profonds vérifiés).
+  Reste : secrets Supabase puis test de synchronisation.
