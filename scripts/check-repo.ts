@@ -7,7 +7,17 @@ import { readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 const root = process.cwd();
-const BINARY_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.gif', '.ico', '.woff', '.woff2', '.zip', '.pdf']);
+const BINARY_EXTENSIONS = new Set([
+  '.png',
+  '.jpg',
+  '.jpeg',
+  '.gif',
+  '.ico',
+  '.woff',
+  '.woff2',
+  '.zip',
+  '.pdf',
+]);
 const TOKEN_PATTERNS = [
   /\bgh[pousr]_[A-Za-z0-9]{20,}\b/,
   /\bgithub_pat_[A-Za-z0-9_]{20,}\b/,
@@ -38,15 +48,17 @@ for (const relative of tracked) {
   }
   if (buffer.includes('\r\n')) problems.push(`${relative}: CRLF line endings`);
   const text = buffer.toString('utf8');
-  if (text.includes('�')) problems.push(`${relative}: invalid UTF-8 sequence`);
+  if (text.includes('\uFFFD')) problems.push(`${relative}: invalid UTF-8 sequence`);
   for (const pattern of TOKEN_PATTERNS) {
     if (pattern.test(text)) problems.push(`${relative}: token-like secret (${pattern})`);
   }
   const normalized = relative.replaceAll('\\', '/');
   const isDataset = normalized.startsWith('public/data/') || normalized === 'data/origins.json';
   if (!SELF_REFERENCING.has(normalized) && !isDataset) {
+    // Tooling paths requested by the repository owner are not "mentions".
+    const prose = text.replaceAll(/CLAUDE\.md|\.claude\//g, '');
     for (const pattern of FORBIDDEN_WORDING) {
-      if (pattern.test(text)) problems.push(`${relative}: forbidden wording (${pattern})`);
+      if (pattern.test(prose)) problems.push(`${relative}: forbidden wording (${pattern})`);
     }
   }
 }

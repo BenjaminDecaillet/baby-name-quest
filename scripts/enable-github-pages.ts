@@ -13,7 +13,8 @@ function readToken(): string {
   const fromEnv = process.env.GITHUB_TOKEN?.trim();
   if (fromEnv) return fromEnv;
   const file = path.join(homedir(), '.bnq', 'github-token');
-  if (!existsSync(file)) throw new Error(`GitHub token not found: set GITHUB_TOKEN or create ${file}`);
+  if (!existsSync(file))
+    throw new Error(`GitHub token not found: set GITHUB_TOKEN or create ${file}`);
   return readFileSync(file, 'utf8').trim();
 }
 
@@ -33,13 +34,21 @@ async function main(): Promise<void> {
       console.log(`GitHub Pages already enabled: ${info.html_url ?? ''}`);
       return;
     }
-    const updated = await fetch(route, { method: 'PUT', headers, body: JSON.stringify({ build_type: 'workflow' }) });
+    const updated = await fetch(route, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify({ build_type: 'workflow' }),
+    });
     if (!updated.ok) throw new Error(`PUT pages failed: ${updated.status}`);
     console.log('GitHub Pages switched to GitHub Actions source');
     return;
   }
   if (current.status !== 404) throw new Error(`GET pages failed: ${current.status}`);
-  const created = await fetch(route, { method: 'POST', headers, body: JSON.stringify({ build_type: 'workflow' }) });
+  const created = await fetch(route, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ build_type: 'workflow' }),
+  });
   if (!created.ok) throw new Error(`POST pages failed: ${created.status}`);
   const info = (await created.json()) as { html_url?: string };
   console.log(`GitHub Pages enabled: ${info.html_url ?? ''}`);
