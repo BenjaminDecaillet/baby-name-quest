@@ -37,21 +37,18 @@ communs, synchronisés entre deux appareils via un simple code de couple.
 | 7 | Mode swipe (gestes, clavier, annuler, progression, reprise) | [x] fait | 605fb77 |
 | 8 | Vue liste + recherche + filtres + tri + « aimer » direct | [x] fait | 6046274 |
 | 9 | Page « Nos matchs » + mes favoris / ses favoris + top commun ordonnable | [x] fait | 9709520 |
-| 10 | Realtime Supabase (broadcast) + branchement runtime — fait dans l'adapter ; reste : tester avec de vraies clés | [~] en attente des clés | 5c9fc01 |
+| 10 | Supabase : schéma + RLS + adapter vérifiés contre le vrai projet ; broadcast temps réel à confirmer à deux | [x] fait | 5c9fc01 |
 | 11 | CI GitHub Actions (verify + déploiement Pages, `enablement: true`) | [x] fait | 52d3a9b |
 | 12 | Polish mobile, accessibilité, README FR (installation Windows) | [x] fait | 2db072c, 6cf39d8 |
-| 13 | PR finale ouverte ; Pages activé (site en ligne) ; secrets Actions Supabase à créer | [~] secrets en attente | — |
+| 13 | PR fusionnées (#1, #2, #3) ; Pages activé ; secrets Supabase en place ; site déployé avec synchronisation | [x] fait | 22e8329 |
 
 ## PROCHAINE ACTION
-Après fusion de la PR « ci(pages): deploy only from main », vérifier que le bundle en ligne
-embarque l'URL Supabase (le hash de `assets/index-*.js` change), que « Mon profil » affiche
-« synchronisés entre vos appareils », puis tester avec deux navigateurs et le même code de couple.
-Consigner le résultat ici.
+Projet livré. Prochain incrément éventuel (à décider par Benjamin) : retours d'usage après un test
+réel à deux téléphones avec le même code de couple (temps réel, ergonomie). Toute reprise repart
+de `main` : `git checkout -B feat/baby-name-shortlist-app origin/main`, puis PR à la fin.
 
 ## BLOQUÉ / EN ATTENTE DE BENJAMIN
-- Fusionner la PR de la branche de travail : le déploiement Pages n'est autorisé que depuis `main`
-  (règle de protection de l'environnement `github-pages`), et les secrets Supabase (créés après la
-  fusion précédente) ne seront intégrés qu'au prochain build sur `main`.
+- Rien. Le token GitHub reste inutile tant que Pages et les secrets existent.
 
 ## Journal
 - 2026-09-04 — Démarrage. Repo vide. Socle en cours (hygiène, hooks, commandes, skills, scaffold).
@@ -70,3 +67,7 @@ Consigner le résultat ici.
 - 2026-09-04 — Secrets Supabase créés par Benjamin (vérifiés présents dans le build, run 18). Le
   déploiement depuis la branche de travail est refusé par la protection d'environnement ; workflow
   ajusté pour ne déployer que depuis `main`.
+- 2026-09-04 — PR #3 fusionnée ; site en ligne reconstruit avec Supabase (bundle vérifié). Test de
+  bout en bout contre le projet Supabase avec la clé anon publique : création couple/profil/vote,
+  lecture, isolation RLS entre codes (0 ligne, écriture refusée), nettoyage. Non testé d'ici : le
+  canal temps réel entre deux navigateurs (repli : rechargement au retour sur l'onglet).
