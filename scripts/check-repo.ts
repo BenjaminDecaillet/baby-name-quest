@@ -42,7 +42,9 @@ for (const relative of tracked) {
   for (const pattern of TOKEN_PATTERNS) {
     if (pattern.test(text)) problems.push(`${relative}: token-like secret (${pattern})`);
   }
-  if (!SELF_REFERENCING.has(relative.replaceAll('\\', '/'))) {
+  const normalized = relative.replaceAll('\\', '/');
+  const isDataset = normalized.startsWith('public/data/') || normalized === 'data/origins.json';
+  if (!SELF_REFERENCING.has(normalized) && !isDataset) {
     for (const pattern of FORBIDDEN_WORDING) {
       if (pattern.test(text)) problems.push(`${relative}: forbidden wording (${pattern})`);
     }

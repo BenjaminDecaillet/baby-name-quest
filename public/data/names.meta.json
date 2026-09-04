@@ -1,0 +1,66 @@
+{
+  "generatedAt": "2026-09-04T07:06:22.475Z",
+  "total": 22870,
+  "lastYear": 2025,
+  "recentYears": {
+    "from": 2021,
+    "to": 2025
+  },
+  "sources": [
+    {
+      "id": "insee",
+      "name": "INSEE - Fichier des prénoms (France, fichier national)",
+      "url": "https://www.insee.fr/fr/statistiques/8595130",
+      "licence": "Licence Ouverte / Open Licence 2.0 (Etalab)",
+      "years": "1900-2025",
+      "downloadUrls": [
+        "https://www.insee.fr/fr/statistiques/fichier/8595130/prenoms-2025-nat_csv.zip"
+      ],
+      "encoding": "utf-8",
+      "firstYear": 1900,
+      "lastYear": 2025,
+      "rows": 724645,
+      "notes": "Counts are rounded by INSEE to the nearest multiple of 5 since the 2025 edition; the \"_PRENOMS_RARES\" aggregate and unknown years are dropped."
+    },
+    {
+      "id": "bfs",
+      "name": "OFS/BFS - Prénoms des nouveau-nés (Suisse)",
+      "url": "https://www.bfs.admin.ch/bfs/fr/home/statistiques/population/naissances-deces/prenoms-nouveaux-nes.html",
+      "licence": "OPEN-BY (utilisation libre, indication de la source obligatoire)",
+      "years": "2000-2025",
+      "downloadUrls": [
+        "https://disseminate.stats.swiss/rest/data/CH1.BEVNAT,DF_BEVNAT_PRENOMS_1,1.0.0/8100..A.COUNT?format=csvfilewithlabels&dimensionAtObservation=AllDimensions",
+        "https://disseminate.stats.swiss/rest/data/CH1.BEVNAT,DF_BEVNAT_PRENOMS_2,1.0.0/8100..A.COUNT?format=csvfilewithlabels&dimensionAtObservation=AllDimensions"
+      ],
+      "encoding": "utf-8",
+      "firstYear": 2000,
+      "lastYear": 2025,
+      "rows": 102183,
+      "notes": "Only the first names published by the OFS for newborns (about 2 700 per sex) are available; rarer names are not published. Whole of Switzerland (GEO=8100), COUNT unit."
+    }
+  ],
+  "rules": {
+    "minLetters": 2,
+    "minTotalCount": 31,
+    "mixedGenderShare": 0.2,
+    "popularityScore": "recentFR + 8 * recentCH (last 5 years)",
+    "trend": {
+      "window": 3,
+      "offsetYears": 10,
+      "upRatio": 1.25,
+      "downRatio": 0.75,
+      "minWeightedAverage": 20,
+      "chWeight": 8
+    },
+    "maxBytes": 4000000
+  },
+  "counts": {
+    "total": 22870,
+    "f": 12095,
+    "m": 10090,
+    "x": 685,
+    "withOrigin": 1193,
+    "withCH": 4572
+  },
+  "sizeBytes": 3887954
+}
