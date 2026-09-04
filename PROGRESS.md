@@ -34,18 +34,19 @@ communs, synchronisés entre deux appareils via un simple code de couple.
 | 4 | Chargement dataset, types, filtres/tri + tests | [x] fait | 531fbe7 |
 | 5 | `StorageAdapter` + `LocalStorageAdapter` + `SupabaseAdapter` + schema.sql + docs/securite.md | [x] fait | 5c9fc01 |
 | 6 | Store de session + onboarding (code couple, profil, genre) + layout + navigation | [x] fait | f4d62fc, 7dd231b |
-| 7 | Mode swipe (gestes, clavier, annuler, progression, reprise) | [~] en cours (sous-agent) | — |
-| 8 | Vue liste + recherche + filtres + tri + « aimer » direct | [~] en cours (sous-agent) | — |
-| 9 | Page « Nos matchs » + mes favoris / ses favoris + top commun ordonnable | [~] en cours (sous-agent) | — |
+| 7 | Mode swipe (gestes, clavier, annuler, progression, reprise) | [x] fait | 605fb77 |
+| 8 | Vue liste + recherche + filtres + tri + « aimer » direct | [x] fait | 6046274 |
+| 9 | Page « Nos matchs » + mes favoris / ses favoris + top commun ordonnable | [x] fait | 9709520 |
 | 10 | Realtime Supabase (broadcast) + branchement runtime — fait dans l'adapter ; reste : tester avec de vraies clés | [~] en attente des clés | 5c9fc01 |
 | 11 | CI GitHub Actions (verify + déploiement Pages, `enablement: true`) | [x] fait | 52d3a9b |
 | 12 | Polish mobile, accessibilité, README FR (installation Windows) | [ ] à faire | — |
 | 13 | Secrets Actions + activation Pages via API + PR finale | [ ] à faire (token absent, scripts prêts) | — |
 
 ## PROCHAINE ACTION
-Intégrer les trois écrans produits par les sous-agents (`src/features/swipe`, `src/features/list`,
-`src/features/matches`) : relire, `npm run verify`, un commit par écran
-(`feat(swipe): …`, `feat(list): …`, `feat(matches): …`), push. Puis chantier 12 (README, polish, a11y).
+Chantier 12 : vérifier le déploiement Pages (Actions → dernier run vert, URL
+https://benjamindecaillet.github.io/baby-name-quest/), tester le parcours complet sur le build
+(`npm run build` puis `npm run preview`), corriger les défauts mobile/a11y trouvés, puis ouvrir la PR
+(chantier 13) avec le titre `feat: build baby name shortlist app` et une description en français.
 
 ## BLOQUÉ / EN ATTENTE DE BENJAMIN
 - **Token GitHub** : `~/.bnq/github-token` absent dans l'environnement de construction, et l'API
@@ -62,3 +63,5 @@ Intégrer les trois écrans produits par les sous-agents (`src/features/swipe`, 
 - 2026-09-04 — Livré : socle, hooks, scaffold, dataset INSEE+OFS (22 870 prénoms), couche données,
   stockage local + Supabase, store, onboarding, layout, CI Pages. Reste : intégrer swipe/liste/matchs,
   README, polish, PR.
+- 2026-09-04 — Livré : swipe, liste + filtres, matchs + classement (tests : 96 verts). Reste : vérification
+  déploiement, polish, PR.
