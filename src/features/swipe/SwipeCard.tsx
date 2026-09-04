@@ -30,7 +30,7 @@ export function CardFace({
   return (
     <div
       style={style}
-      className={`relative flex min-h-[24rem] flex-1 flex-col justify-between overflow-hidden rounded-3xl bg-white p-6 shadow-lg ring-1 ring-stone-200 ${className}`}
+      className={`relative flex min-h-0 flex-1 flex-col justify-between overflow-hidden rounded-3xl bg-white p-5 shadow-lg ring-1 ring-stone-200 ${className}`}
     >
       {overlay ? (
         <span
@@ -52,8 +52,8 @@ export function CardFace({
         {entry.origin ? <Badge tone="stone">Origine {entry.origin}</Badge> : null}
       </div>
 
-      <div className="flex flex-1 flex-col items-center justify-center gap-3 py-6 text-center">
-        <h2 className="max-w-full text-5xl leading-tight font-extrabold break-words text-stone-800 sm:text-6xl">
+      <div className="flex flex-1 flex-col items-center justify-center gap-2 py-2 text-center">
+        <h2 className="max-w-full text-4xl leading-tight font-extrabold break-words text-stone-800 sm:text-6xl">
           {entry.name}
         </h2>
         {likedByPartner ? (

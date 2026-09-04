@@ -154,7 +154,7 @@ export function SwipePage() {
   }
 
   return (
-    <section className="flex flex-1 flex-col gap-3 px-4 pt-3">
+    <section className="flex min-h-0 flex-1 flex-col gap-2 px-4 pt-2 pb-28">
       <h1 className="sr-only">Découvrir des prénoms</h1>
       <div className="flex items-center justify-between gap-3">
         <div role="group" aria-label="Ordre des prénoms" className="flex flex-wrap gap-1.5">
@@ -177,31 +177,13 @@ export function SwipePage() {
 
       {current ? (
         <>
-          <div className="relative flex flex-1 flex-col">
-            <SwipeCard
-              key={current.id}
-              entry={current}
-              likedByPartner={likedByPartner}
-              reducedMotion={reducedMotion}
-              onDecide={decide}
-            />
-            {ghost ? (
-              <GhostCard
-                key={ghost.key}
-                entry={ghost.entry}
-                direction={ghost.direction}
-                fromDx={ghost.fromDx}
-              />
-            ) : null}
-          </div>
-
           <div className="flex flex-col gap-2">
             <button
               type="button"
               aria-expanded={noteOpen}
               aria-controls="swipe-note"
               onClick={() => setNoteOpen((open) => !open)}
-              className="min-h-11 self-center rounded-full px-4 text-sm font-semibold text-stone-600 hover:bg-stone-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500"
+              className="min-h-10 self-center rounded-full px-3 text-xs font-semibold text-stone-500 hover:bg-stone-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500"
             >
               <span aria-hidden="true">📝 </span>
               {noteOpen ? 'Masquer la note' : 'Ajouter une note'}
@@ -224,7 +206,25 @@ export function SwipePage() {
             ) : null}
           </div>
 
-          <div className="sticky bottom-24 pt-1 pb-2">
+          <div className="relative flex min-h-0 flex-1 flex-col">
+            <SwipeCard
+              key={current.id}
+              entry={current}
+              likedByPartner={likedByPartner}
+              reducedMotion={reducedMotion}
+              onDecide={decide}
+            />
+            {ghost ? (
+              <GhostCard
+                key={ghost.key}
+                entry={ghost.entry}
+                direction={ghost.direction}
+                fromDx={ghost.fromDx}
+              />
+            ) : null}
+          </div>
+
+          <div className="fixed inset-x-0 bottom-16 z-10 bg-gradient-to-t from-stone-50 via-stone-50/95 to-stone-50/0 px-4 pt-3 pb-2">
             <SwipeActions
               onSkip={() => decide('skip')}
               onLike={() => decide('like')}

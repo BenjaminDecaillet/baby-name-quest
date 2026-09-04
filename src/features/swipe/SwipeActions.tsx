@@ -64,7 +64,7 @@ export function SwipeActions({
         icon="↺"
         onClick={onUndo}
         disabled={!canUndo}
-        className="h-12 w-12 bg-white text-xl text-stone-600 shadow-sm ring-1 ring-stone-200 hover:bg-stone-50"
+        className="h-11 w-11 bg-white text-lg text-stone-600 shadow-sm ring-1 ring-stone-200 hover:bg-stone-50"
       />
       <RoundButton
         label="Je passe"
@@ -72,7 +72,7 @@ export function SwipeActions({
         icon="✕"
         onClick={onSkip}
         disabled={disabled}
-        className="h-16 w-16 bg-white text-2xl font-bold text-red-500 shadow-md ring-1 ring-stone-200 hover:bg-red-50"
+        className="h-14 w-14 bg-white text-2xl font-bold text-red-500 shadow-md ring-1 ring-stone-200 hover:bg-red-50"
       />
       <RoundButton
         label="J'aime"
@@ -80,7 +80,7 @@ export function SwipeActions({
         icon="❤"
         onClick={onLike}
         disabled={disabled}
-        className="h-20 w-20 bg-rose-600 text-3xl text-white shadow-lg hover:bg-rose-700"
+        className="h-16 w-16 bg-rose-600 text-3xl text-white shadow-lg hover:bg-rose-700"
       />
     </div>
   );

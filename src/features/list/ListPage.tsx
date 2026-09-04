@@ -117,14 +117,12 @@ export function ListPage() {
   const clearAll = () => setFilters({ ...EMPTY_FILTERS, sort: filters.sort });
   const activeCount = countActiveFilters(effectiveFilters);
   const partnerName = partner?.displayName ?? null;
-  // The banner about a missing partner makes the app header taller.
-  const stickyTop = partner ? 'top-[61px]' : 'top-[89px]';
 
   return (
     <section className="flex flex-col">
       <h1 className="sr-only">Liste des prénoms</h1>
       <div
-        className={`sticky ${stickyTop} z-10 flex flex-col gap-2 border-b border-stone-200 bg-stone-50/95 px-4 pt-3 pb-2 backdrop-blur`}
+        className={`sticky top-0 z-10 flex flex-col gap-2 border-b border-stone-200 bg-stone-50/95 px-4 pt-3 pb-2 backdrop-blur`}
       >
         <div className="flex items-center gap-2">
           <div className="relative flex-1">

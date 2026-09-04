@@ -13,8 +13,8 @@ export function Layout() {
   const { matches } = useVotes();
 
   return (
-    <div className="flex min-h-full flex-col bg-stone-50">
-      <header className="sticky top-0 z-20 border-b border-stone-200 bg-white/90 backdrop-blur">
+    <div className="flex h-dvh flex-col bg-stone-50">
+      <header className="z-20 shrink-0 border-b border-stone-200 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 px-4 py-2.5">
           <NavLink to="/swipe" className="flex items-center gap-2 font-extrabold text-rose-600">
             <span aria-hidden="true">👶</span>
@@ -39,14 +39,16 @@ export function Layout() {
         </div>
         {!partner ? (
           <p className="bg-amber-50 px-4 py-1.5 text-center text-xs text-amber-800">
-            Votre moitié n'a pas encore rejoint le code{' '}
-            <span className="font-mono">{profile?.coupleCode}</span>.
+            En attente de votre moitié · code{' '}
+            <span className="font-mono">{profile?.coupleCode}</span>
           </p>
         ) : null}
       </header>
 
-      <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col pb-24">
-        <Outlet />
+      <main className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain pb-[calc(4rem+env(safe-area-inset-bottom))]">
+        <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col">
+          <Outlet />
+        </div>
       </main>
 
       <nav

@@ -46,7 +46,7 @@ export function TabList({ tabs, selected, onSelect }: TabListProps) {
     <div
       role="tablist"
       aria-label="Vues des favoris"
-      className="flex gap-1 rounded-2xl bg-stone-200/70 p-1"
+      className="flex gap-1 overflow-x-auto rounded-2xl bg-stone-200/70 p-1"
     >
       {tabs.map((tab, index) => {
         const active = tab.id === selected;
@@ -65,14 +65,14 @@ export function TabList({ tabs, selected, onSelect }: TabListProps) {
             tabIndex={active ? 0 : -1}
             onClick={() => onSelect(tab.id)}
             onKeyDown={(event) => onKeyDown(event, index)}
-            className={`flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-xl px-2 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500 ${
+            className={`flex min-h-11 flex-1 shrink-0 items-center justify-center gap-1.5 rounded-xl px-2 text-[13px] font-semibold whitespace-nowrap transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500 ${
               active
                 ? 'bg-white text-rose-600 shadow-sm'
                 : 'text-stone-600 hover:bg-white/60 hover:text-stone-800'
             }`}
           >
             {tab.icon ? <span aria-hidden="true">{tab.icon}</span> : null}
-            <span className="truncate">{tab.label}</span>
+            <span>{tab.label}</span>
             {tab.count !== undefined && tab.count > 0 ? (
               <span
                 className={`rounded-full px-1.5 text-[11px] font-bold ${

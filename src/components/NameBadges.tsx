@@ -33,44 +33,35 @@ export function NameBadges({ entry, compact = false }: { entry: NameEntry; compa
 /** Detailed statistics block shown on the swipe card and in details views. */
 export function NameStats({ entry }: { entry: NameEntry }) {
   return (
-    <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-      <div>
-        <dt className="text-xs uppercase tracking-wide text-stone-500">Naissances en France</dt>
-        <dd className="font-semibold text-stone-800">
-          {formatCount(entry.countFR)}
-          <span className="ml-1 text-xs font-normal text-stone-500">
-            dont {formatCount(entry.recentFR)} sur 5 ans
-          </span>
-        </dd>
-      </div>
-      <div>
-        <dt className="text-xs uppercase tracking-wide text-stone-500">Naissances en Suisse</dt>
-        <dd className="font-semibold text-stone-800">
-          {formatCount(entry.countCH)}
-          <span className="ml-1 text-xs font-normal text-stone-500">
-            dont {formatCount(entry.recentCH)} sur 5 ans
-          </span>
-        </dd>
-      </div>
-      <div>
-        <dt className="text-xs uppercase tracking-wide text-stone-500">Popularité</dt>
-        <dd className="font-semibold text-stone-800">
-          {popularityLabel(entry)}{' '}
-          <span className="text-xs font-normal text-stone-500">
-            (rang {formatCount(entry.popularityRank)})
-          </span>
-        </dd>
-      </div>
-      <div>
-        <dt className="text-xs uppercase tracking-wide text-stone-500">Tendance sur 10 ans</dt>
-        <dd className="font-semibold text-stone-800">{TREND_LABELS[entry.trend]}</dd>
-      </div>
-      {entry.origin ? (
-        <div className="col-span-2">
-          <dt className="text-xs uppercase tracking-wide text-stone-500">Origine</dt>
-          <dd className="font-semibold text-stone-800 capitalize">{entry.origin}</dd>
-        </div>
-      ) : null}
+    <dl className="grid grid-cols-2 gap-x-3 gap-y-2 text-sm">
+      <StatItem
+        label="Naissances en France"
+        value={formatCount(entry.countFR)}
+        hint={`${formatCount(entry.recentFR)} sur les 5 dernières années`}
+      />
+      <StatItem
+        label="Naissances en Suisse"
+        value={formatCount(entry.countCH)}
+        hint={`${formatCount(entry.recentCH)} sur les 5 dernières années`}
+      />
+      <StatItem
+        label="Popularité"
+        value={popularityLabel(entry)}
+        hint={`rang ${formatCount(entry.popularityRank)}`}
+      />
+      <StatItem label="Tendance sur 10 ans" value={TREND_LABELS[entry.trend]} />
     </dl>
+  );
+}
+
+function StatItem({ label, value, hint }: { label: string; value: string; hint?: string }) {
+  return (
+    <div className="min-w-0">
+      <dt className="text-[11px] uppercase tracking-wide text-stone-500">{label}</dt>
+      <dd className="leading-tight font-semibold text-stone-800">
+        {value}
+        {hint ? <span className="block text-xs font-normal text-stone-500">{hint}</span> : null}
+      </dd>
+    </div>
   );
 }
