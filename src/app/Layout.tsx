@@ -1,4 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom';
+import { matchesPreference } from '../data/filters';
+import { useNames } from '../data/useNames';
 import { useSession } from '../store/SessionContext';
 import { useVotes } from '../store/useVotes';
 
@@ -11,6 +13,14 @@ const TABS = [
 export function Layout() {
   const { profile, partner, storageKind } = useSession();
   const { matches } = useVotes();
+  const { byId } = useNames();
+  // Same count as the « Nos matchs » tab: only names allowed by the current preference.
+  const matchCount = profile
+    ? matches.filter((id) => {
+        const entry = byId.get(id);
+        return entry ? matchesPreference(entry, profile.genderPreference) : false;
+      }).length
+    : 0;
 
   return (
     <div className="flex h-dvh flex-col bg-stone-50">
@@ -70,9 +80,9 @@ export function Layout() {
                   {tab.icon}
                 </span>
                 <span>{tab.label}</span>
-                {tab.to === '/matchs' && matches.length > 0 ? (
+                {tab.to === '/matchs' && matchCount > 0 ? (
                   <span className="absolute top-2 right-[calc(50%-1.75rem)] rounded-full bg-rose-600 px-1.5 text-[10px] font-bold text-white">
-                    {matches.length}
+                    {matchCount}
                     <span className="sr-only"> prénoms en commun</span>
                   </span>
                 ) : null}
