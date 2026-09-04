@@ -1,0 +1,23 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+coverage/
+
+# secrets — never commit
+.env
+.env.*
+!.env.example
+*.token
+.git-credentials
+.bnq/
+
+# data pipeline cache (downloaded sources)
+data/cache/
+
+# local tooling
+.claude/settings.local.json
+*.log
+.DS_Store
+Thumbs.db
