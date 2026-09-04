@@ -31,6 +31,11 @@ jobs:
       - run: npm run typecheck
       - run: npm run test
       - run: npm run check:repo
+      - name: Contrôle de la configuration Supabase
+        run: node scripts/check-ci-secrets.mjs
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
       - name: Build (base GitHub Pages)
         run: npm run build
         env:
