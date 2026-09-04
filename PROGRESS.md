@@ -39,23 +39,25 @@ communs, synchronisés entre deux appareils via un simple code de couple.
 | 9 | Page « Nos matchs » + mes favoris / ses favoris + top commun ordonnable | [x] fait | 9709520 |
 | 10 | Realtime Supabase (broadcast) + branchement runtime — fait dans l'adapter ; reste : tester avec de vraies clés | [~] en attente des clés | 5c9fc01 |
 | 11 | CI GitHub Actions (verify + déploiement Pages, `enablement: true`) | [x] fait | 52d3a9b |
-| 12 | Polish mobile, accessibilité, README FR (installation Windows) | [ ] à faire | — |
-| 13 | Secrets Actions + activation Pages via API + PR finale | [ ] à faire (token absent, scripts prêts) | — |
+| 12 | Polish mobile, accessibilité, README FR (installation Windows) | [x] fait | 2db072c, 6cf39d8 |
+| 13 | PR finale ouverte ; secrets Actions + activation Pages via API en attente du token | [~] PR ouverte | — |
 
 ## PROCHAINE ACTION
-Chantier 12 : vérifier le déploiement Pages (Actions → dernier run vert, URL
-https://benjamindecaillet.github.io/baby-name-quest/), tester le parcours complet sur le build
-(`npm run build` puis `npm run preview`), corriger les défauts mobile/a11y trouvés, puis ouvrir la PR
-(chantier 13) avec le titre `feat: build baby name shortlist app` et une description en français.
+Dès que Benjamin a lancé `npm run pages:enable` (ou activé Pages à la main), relancer le workflow
+(Actions → CI → Run workflow sur `feat/baby-name-shortlist-app`) et vérifier
+https://benjamindecaillet.github.io/baby-name-quest/. Dès que les clés Supabase sont fournies :
+exécuter `supabase/schema.sql`, créer les secrets (`npm run secrets:github`), relancer le workflow,
+tester la synchronisation entre deux appareils avec le même code de couple, puis noter le résultat ici.
 
 ## BLOQUÉ / EN ATTENTE DE BENJAMIN
-- **Token GitHub** : `~/.bnq/github-token` absent dans l'environnement de construction, et l'API
-  GitHub n'est pas joignable directement depuis ce conteneur. Le push git fonctionne.
-  Scripts prêts à lancer localement : `npm run pages:enable` (active Pages, source Actions) et
-  `npm run secrets:github` (crée les secrets `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`).
-  Le workflow tente aussi d'activer Pages tout seul (`actions/configure-pages` avec `enablement: true`).
-- **Clés Supabase** : URL du projet + clé anon à fournir (Dashboard Supabase → Project Settings →
-  API → « Project URL » et « anon public »). Puis exécuter `supabase/schema.sql` dans SQL Editor.
+- **Activation de GitHub Pages** : le `GITHUB_TOKEN` du workflow ne peut pas créer le site Pages
+  (« Resource not accessible by integration », run 8). Le job de vérification est vert ; seul le
+  déploiement attend l'activation. Avec le token dans `%USERPROFILE%\.bnq\github-token` :
+  `npm run pages:enable`. Alternative manuelle : Settings → Pages → Source « GitHub Actions ».
+- **Clés Supabase** : URL du projet + clé anon (Dashboard → Project Settings → API). Puis
+  `supabase/schema.sql` dans SQL Editor, `.env` local, et `npm run secrets:github`.
+- **Token GitHub** : absent de l'environnement de construction ; l'API GitHub n'y est pas joignable
+  directement. Le push git et la création de PR passent par l'intégration de l'environnement.
 
 ## Journal
 - 2026-09-04 — Démarrage. Repo vide. Socle en cours (hygiène, hooks, commandes, skills, scaffold).
@@ -65,3 +67,6 @@ https://benjamindecaillet.github.io/baby-name-quest/), tester le parcours comple
   README, polish, PR.
 - 2026-09-04 — Livré : swipe, liste + filtres, matchs + classement (tests : 96 verts). Reste : vérification
   déploiement, polish, PR.
+- 2026-09-04 — Polish mobile (swipe plein écran, défilement dans `main`, onglets), parcours complet
+  vérifié dans Chromium en viewport iPhone (aucune erreur console). PR ouverte. En attente :
+  activation Pages (token) et clés Supabase.
