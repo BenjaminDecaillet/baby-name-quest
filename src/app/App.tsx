@@ -1,10 +1,37 @@
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { Spinner } from '../components/ui/Spinner';
+import { ListPage } from '../features/list/ListPage';
+import { MatchesPage } from '../features/matches/MatchesPage';
+import { Onboarding } from '../features/onboarding/Onboarding';
+import { ProfilePage } from '../features/profile/ProfilePage';
+import { SwipePage } from '../features/swipe/SwipePage';
+import { SessionProvider, useSession } from '../store/SessionContext';
+import { Layout } from './Layout';
+
+function Gate() {
+  const { status } = useSession();
+  if (status === 'loading') return <Spinner />;
+  if (status !== 'ready') return <Onboarding />;
+  return (
+    <Routes>
+      <Route element={<Layout />}>
+        <Route index element={<Navigate to="/swipe" replace />} />
+        <Route path="/swipe" element={<SwipePage />} />
+        <Route path="/liste" element={<ListPage />} />
+        <Route path="/matchs" element={<MatchesPage />} />
+        <Route path="/profil" element={<ProfilePage />} />
+        <Route path="*" element={<Navigate to="/swipe" replace />} />
+      </Route>
+    </Routes>
+  );
+}
+
 export function App() {
   return (
-    <main className="flex min-h-full flex-col items-center justify-center gap-4 p-6 text-center">
-      <h1 className="text-3xl font-bold text-rose-600">Baby Name Quest</h1>
-      <p className="max-w-sm text-stone-600">
-        Parcourez des milliers de prénoms et constituez votre shortlist à deux.
-      </p>
-    </main>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
+      <SessionProvider>
+        <Gate />
+      </SessionProvider>
+    </BrowserRouter>
   );
 }
