@@ -28,31 +28,45 @@ communs, synchronisés entre deux appareils via un simple code de couple.
 ## Plan de chantiers (incréments de 30–45 min)
 | # | Chantier | Statut | Commit |
 |---|----------|--------|--------|
-| 1 | Socle repo : hygiène, hooks husky, commandes, skills, PROGRESS/CLAUDE | [~] en cours | — |
-| 2 | Squelette Vite + React + Tailwind + Vitest, build vert | [ ] à faire | — |
-| 3 | Pipeline données `build-names.ts` + dataset généré + docs/donnees.md | [~] en cours (sous-agent) | — |
-| 4 | Chargement dataset, types, filtres/tri/matching + tests | [ ] à faire | — |
-| 5 | `StorageAdapter` + `LocalStorageAdapter` + store + tests | [ ] à faire | — |
-| 6 | Routing + layout mobile + onboarding (code couple, profil, genre) | [ ] à faire | — |
-| 7 | Mode swipe (gestes, clavier, annuler, progression, reprise) | [ ] à faire | — |
-| 8 | Vue liste + recherche + filtres + tri + « aimer » direct | [ ] à faire | — |
-| 9 | Page « Nos matchs » + mes favoris / ses favoris + top commun ordonnable | [ ] à faire | — |
-| 10 | `supabase/schema.sql` (RLS) + `SupabaseAdapter` + realtime + docs/securite.md | [ ] à faire | — |
-| 11 | CI GitHub Actions (verify + déploiement Pages) + activation Pages via API | [ ] à faire | — |
-| 12 | Polish mobile, accessibilité, README FR (installation Windows) | [ ] à faire | — |
-| 13 | Secrets Actions via API + PR finale | [ ] à faire | — |
+| 1 | Socle repo : hygiène, hooks husky, commandes, skills, PROGRESS.md et conventions | [x] fait | 463e292 |
+| 2 | Squelette Vite + React + Tailwind + Vitest, build vert | [x] fait | 5ff1bb3 |
+| 3 | Pipeline données `build-names.ts` + dataset généré + docs/donnees.md | [x] fait | 18230ba |
+| 4 | Chargement dataset, types, filtres/tri + tests | [x] fait | 531fbe7 |
+| 5 | `StorageAdapter` + `LocalStorageAdapter` + `SupabaseAdapter` + schema.sql + docs/securite.md | [x] fait | 5c9fc01 |
+| 6 | Store de session + onboarding (code couple, profil, genre) + layout + navigation | [x] fait | f4d62fc, 7dd231b |
+| 7 | Mode swipe (gestes, clavier, annuler, progression, reprise) | [x] fait | 605fb77 |
+| 8 | Vue liste + recherche + filtres + tri + « aimer » direct | [x] fait | 6046274 |
+| 9 | Page « Nos matchs » + mes favoris / ses favoris + top commun ordonnable | [x] fait | 9709520 |
+| 10 | Realtime Supabase (broadcast) + branchement runtime — fait dans l'adapter ; reste : tester avec de vraies clés | [~] en attente des clés | 5c9fc01 |
+| 11 | CI GitHub Actions (verify + déploiement Pages, `enablement: true`) | [x] fait | 52d3a9b |
+| 12 | Polish mobile, accessibilité, README FR (installation Windows) | [x] fait | 2db072c, 6cf39d8 |
+| 13 | PR finale ouverte ; secrets Actions + activation Pages via API en attente du token | [~] PR ouverte | — |
 
 ## PROCHAINE ACTION
-Terminer le chantier 2 : vérifier que `npm install` est passé, écrire `src/main.tsx` et `src/App.tsx`
-minimaux, lancer `npm run verify`, puis commit `build(setup): scaffold vite react typescript app`
-et push sur `feat/baby-name-shortlist-app`.
+Dès que Benjamin a lancé `npm run pages:enable` (ou activé Pages à la main), relancer le workflow
+(Actions → CI → Run workflow sur `feat/baby-name-shortlist-app`) et vérifier
+https://benjamindecaillet.github.io/baby-name-quest/. Dès que les clés Supabase sont fournies :
+exécuter `supabase/schema.sql`, créer les secrets (`npm run secrets:github`), relancer le workflow,
+tester la synchronisation entre deux appareils avec le même code de couple, puis noter le résultat ici.
 
 ## BLOQUÉ / EN ATTENTE DE BENJAMIN
-- **Token GitHub** : `~/.bnq/github-token` absent dans l'environnement de construction.
-  Le push passe par l'authentification de l'environnement ; les appels API (Pages, secrets, PR)
-  se feront via les outils GitHub disponibles ou attendront le token.
-- **Clés Supabase** : URL du projet + clé anon à fournir (demande faite au chantier 10).
+- **Activation de GitHub Pages** : le `GITHUB_TOKEN` du workflow ne peut pas créer le site Pages
+  (« Resource not accessible by integration », run 8). Le job de vérification est vert ; seul le
+  déploiement attend l'activation. Avec le token dans `%USERPROFILE%\.bnq\github-token` :
+  `npm run pages:enable`. Alternative manuelle : Settings → Pages → Source « GitHub Actions ».
+- **Clés Supabase** : URL du projet + clé anon (Dashboard → Project Settings → API). Puis
+  `supabase/schema.sql` dans SQL Editor, `.env` local, et `npm run secrets:github`.
+- **Token GitHub** : absent de l'environnement de construction ; l'API GitHub n'y est pas joignable
+  directement. Le push git et la création de PR passent par l'intégration de l'environnement.
 
 ## Journal
 - 2026-09-04 — Démarrage. Repo vide. Socle en cours (hygiène, hooks, commandes, skills, scaffold).
   Sous-agent lancé sur le pipeline de données.
+- 2026-09-04 — Livré : socle, hooks, scaffold, dataset INSEE+OFS (22 870 prénoms), couche données,
+  stockage local + Supabase, store, onboarding, layout, CI Pages. Reste : intégrer swipe/liste/matchs,
+  README, polish, PR.
+- 2026-09-04 — Livré : swipe, liste + filtres, matchs + classement (tests : 96 verts). Reste : vérification
+  déploiement, polish, PR.
+- 2026-09-04 — Polish mobile (swipe plein écran, défilement dans `main`, onglets), parcours complet
+  vérifié dans Chromium en viewport iPhone (aucune erreur console). PR ouverte. En attente :
+  activation Pages (token) et clés Supabase.

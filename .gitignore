@@ -21,3 +21,6 @@ data/cache/
 *.log
 .DS_Store
 Thumbs.db
+
+# TypeScript incremental build info
+*.tsbuildinfo
