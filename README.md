@@ -67,9 +67,9 @@ Le modèle de sécurité (clé anon publique, protection par le code de couple, 
 dans [`docs/securite.md`](docs/securite.md).
 
 ## Déploiement
-Chaque push sur `main` (et sur la branche de travail) déclenche `.github/workflows/ci.yml` :
-lint, typecheck, tests, contrôle du dépôt, build avec `VITE_BASE_PATH=/baby-name-quest/`,
-puis déploiement sur GitHub Pages.
+Chaque push et chaque PR déclenchent `.github/workflows/ci.yml` : lint, typecheck, tests, contrôle
+du dépôt, build avec `VITE_BASE_PATH=/baby-name-quest/`. Le déploiement sur GitHub Pages n'a lieu
+que depuis `main` (l'environnement `github-pages` y est restreint).
 
 ## Structure
 ```

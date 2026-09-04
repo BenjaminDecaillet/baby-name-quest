@@ -31,6 +31,11 @@ jobs:
       - run: npm run typecheck
       - run: npm run test
       - run: npm run check:repo
+      - name: Contrôle de la configuration Supabase
+        run: node scripts/check-ci-secrets.mjs
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
       - name: Build (base GitHub Pages)
         run: npm run build
         env:
@@ -44,7 +49,8 @@ jobs:
   deploy:
     name: Déploiement GitHub Pages
     needs: verify
-    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feat/baby-name-shortlist-app')
+    # L'environnement github-pages n'accepte que la branche main (règle de protection).
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
