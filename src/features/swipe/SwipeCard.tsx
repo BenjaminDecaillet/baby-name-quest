@@ -1,5 +1,5 @@
 import { useEffect, useState, type CSSProperties } from 'react';
-import { GenderBadge, NameStats, TrendBadge } from '../../components/NameBadges';
+import { GenderBadge, NameMeaning, NameStats, TrendBadge } from '../../components/NameBadges';
 import { Badge } from '../../components/ui/Badge';
 import type { NameEntry } from '../../data/types';
 import type { VoteValue } from '../../storage';
@@ -56,6 +56,7 @@ export function CardFace({
         <h2 className="max-w-full text-4xl leading-tight font-extrabold break-words text-stone-800 sm:text-6xl">
           {entry.name}
         </h2>
+        <NameMeaning entry={entry} className="max-w-prose text-base sm:text-lg" />
         {likedByPartner ? (
           <p className="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-3 py-1 text-sm font-semibold text-rose-700 ring-1 ring-rose-200">
             <span aria-hidden="true">❤️</span>

@@ -8,8 +8,9 @@ les coups de cœur communs remontent dans « Nos matchs ».
 
 ## Fonctionnalités
 - **Découvrir (swipe)** : un prénom à la fois, ❤️ j'aime / ✕ je passe, gestes tactiles et flèches
-  clavier, annulation de la dernière décision, progression, reprise là où on s'était arrêté.
-  Pour chaque prénom : naissances en France et en Suisse, popularité, tendance sur 10 ans, origine.
+  clavier, annulation de la dernière décision, progression, reprise là où on s'était arrêté ;
+  ordre de popularité, ordre alphabétique ou mélange. Pour chaque prénom : naissances en France et
+  en Suisse, popularité, tendance sur 10 ans, origine et signification.
 - **Liste** : recherche instantanée (insensible aux accents), filtres genre / première lettre /
   longueur / popularité / tendance / origine, tri, et « aimer » directement depuis la liste.
 - **Nos matchs** : les prénoms aimés par les deux, avec un top commun que l'on peut ordonner ;

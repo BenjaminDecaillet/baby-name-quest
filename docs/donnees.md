@@ -64,10 +64,11 @@ Tableau JSON compact (sans indentation) d'objets triés par `popularityRank` :
 | `firstLetter`    | `string`                     | Première lettre en majuscule sans accent (`É` → `E`).                                                                                                                                                                                                   |
 | `length`         | `number`                     | Nombre de lettres, sans tirets, espaces ni apostrophes.                                                                                                                                                                                                 |
 | `origin`         | `string` (optionnel)         | Origine étymologique en français (`hébraïque`, `latin`, `grec`, `germanique`, `arabe`, `breton`, …) issue de la table `data/origins.json`.                                                                                                              |
+| `meaning`        | `string` (optionnel)         | Signification du prénom en français, courte (`force de Dieu`, `diminutif d'Anne, « pleine de grâce »`), issue de la table `data/meanings.json`.                                                                                                         |
 
 `names.meta.json` contient : `generatedAt`, `total`, `lastYear`, `recentYears`, la liste `sources`
 (`name`, `url`, `licence`, `years`, URL de téléchargement, encodage détecté, nombre de lignes), les `rules`
-appliquées, les `counts` (par genre, avec données suisses, avec origine) et `sizeBytes`.
+appliquées, les `counts` (par genre, avec données suisses, avec origine, avec signification) et `sizeBytes`.
 
 ## Règles de construction
 
@@ -82,7 +83,8 @@ appliquées, les `counts` (par genre, avec données suisses, avec origine) et `s
    effectifs par sexe servent à déterminer `gender`.
 4. Sont écartés : les prénoms de moins de 2 lettres, et ceux dont l'effectif total (France + Suisse, toutes années)
    est inférieur à 3. Le budget de taille peut ensuite relever ce seuil (valeur effective dans `names.meta.json`).
-5. `origin` est recherchée dans `data/origins.json` de manière insensible à la casse (accents conservés).
+5. `origin` et `meaning` sont recherchées dans `data/origins.json` et `data/meanings.json` de manière insensible à la
+   casse (accents conservés). Une valeur vide dans une table est ignorée.
 
 ### Popularité
 
@@ -100,10 +102,17 @@ départagés par l'effectif total puis par ordre alphabétique.
 - Si les deux moyennes sont inférieures à 20 naissances pondérées par an, la tendance n'est pas significative et
   reste `stable`. Un prénom absent de la fenêtre de référence mais présent au-dessus de ce seuil aujourd'hui est `up`.
 
-## Table des origines
+## Tables des origines et des significations
 
 `data/origins.json` est une table éditée à la main : `{ "<prénom en minuscules, accents conservés>": "<origine>" }`,
 environ 1 200 prénoms courants en France et en Suisse. Les libellés utilisés sont : hébraïque, araméen, grec, latin,
 germanique, celtique, breton, irlandais, occitan, basque, italien, espagnol, portugais, anglais, scandinave, slave,
 persan, arabe, berbère, africain, turc, hindi, japonais, polynésien, albanais. Les origines étymologiques sont
 souvent débattues ; la table donne l'origine la plus communément admise et peut être complétée librement.
+
+`data/meanings.json` suit le même format : `{ "<prénom en minuscules, accents conservés>": "<signification>" }`,
+pour les mêmes prénoms que la table des origines. Chaque signification est une courte phrase en français
+(au plus 80 caractères, sans point final) : le sens étymologique communément admis, ou pour un diminutif, une
+variante ou un composé, le prénom de base et son sens (`diminutif d'Anne, « pleine de grâce »`). Lorsque le sens
+est débattu, la valeur le dit (`sens incertain, peut-être « … »`). Les deux tables peuvent être enrichies
+indépendamment ; il suffit ensuite de relancer `npm run build:names`.

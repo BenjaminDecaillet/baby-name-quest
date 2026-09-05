@@ -2,12 +2,21 @@ import { applyPreference } from '../../data/filters';
 import type { GenderPreference, NameEntry } from '../../data/types';
 import type { Vote } from '../../storage';
 
-export type QueueOrder = 'popularity' | 'shuffle';
+export type QueueOrder = 'popularity' | 'alpha' | 'shuffle';
+
+export const QUEUE_ORDERS: readonly QueueOrder[] = ['popularity', 'alpha', 'shuffle'];
 
 export const ORDER_LABELS: Record<QueueOrder, string> = {
-  popularity: 'Ordre de popularité',
+  popularity: 'Popularité',
+  alpha: 'Alphabétique',
   shuffle: 'Mélanger',
 };
+
+const collator = new Intl.Collator('fr', { sensitivity: 'base' });
+
+function isQueueOrder(value: unknown): value is QueueOrder {
+  return QUEUE_ORDERS.includes(value as QueueOrder);
+}
 
 export const SHUFFLE_SEED_KEY = 'bnq.swipe.shuffleSeed';
 export const ORDER_KEY = 'bnq.swipe.order';
@@ -62,7 +71,18 @@ export function orderPool(
   order: QueueOrder,
   seed: string,
 ): NameEntry[] {
-  return order === 'shuffle' ? seededShuffle(pool, seed) : [...pool];
+  switch (order) {
+    case 'shuffle':
+      return seededShuffle(pool, seed);
+    case 'alpha':
+      // Accent-insensitive A→Z; homographs (« Zoe » / « Zoé ») keep the most popular first.
+      return [...pool].sort(
+        (a, b) => collator.compare(a.name, b.name) || a.popularityRank - b.popularityRank,
+      );
+    case 'popularity':
+    default:
+      return [...pool];
+  }
 }
 
 /** Names still to review: the ordered pool minus the names I already voted on. */
@@ -114,7 +134,8 @@ function safeStorage(): Storage | null {
 
 export function readOrder(storage: Storage | null = safeStorage()): QueueOrder {
   try {
-    return storage?.getItem(ORDER_KEY) === 'shuffle' ? 'shuffle' : 'popularity';
+    const stored = storage?.getItem(ORDER_KEY);
+    return isQueueOrder(stored) ? stored : 'popularity';
   } catch {
     return 'popularity';
   }

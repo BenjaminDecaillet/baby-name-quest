@@ -54,6 +54,7 @@ const scriptsDir = dirname(fileURLToPath(import.meta.url));
 const rootDir = resolve(scriptsDir, '..');
 const cacheDir = join(rootDir, 'data', 'cache');
 const originsPath = join(rootDir, 'data', 'origins.json');
+const meaningsPath = join(rootDir, 'data', 'meanings.json');
 const outputDir = join(rootDir, 'public', 'data');
 const namesPath = join(outputDir, 'names.json');
 const metaPath = join(outputDir, 'names.meta.json');
@@ -172,13 +173,23 @@ interface Candidate {
   score: number;
 }
 
-function loadOrigins(): Map<string, string> {
-  const raw = JSON.parse(readFileSync(originsPath, 'utf8')) as Record<string, string>;
-  const origins = new Map<string, string>();
-  for (const [name, origin] of Object.entries(raw)) {
-    origins.set(name.normalize('NFC').toLowerCase().trim(), origin);
+/** Curated table `{ "<name in lowercase, accents kept>": "<value>" }`, keyed like the merge key. */
+function loadCuratedTable(path: string): Map<string, string> {
+  const raw = JSON.parse(readFileSync(path, 'utf8')) as Record<string, string>;
+  const table = new Map<string, string>();
+  for (const [name, value] of Object.entries(raw)) {
+    const trimmed = value.trim();
+    if (trimmed) table.set(name.normalize('NFC').toLowerCase().trim(), trimmed);
   }
-  return origins;
+  return table;
+}
+
+function loadOrigins(): Map<string, string> {
+  return loadCuratedTable(originsPath);
+}
+
+function loadMeanings(): Map<string, string> {
+  return loadCuratedTable(meaningsPath);
 }
 
 function assignIds(candidates: Candidate[]): void {
@@ -268,8 +279,9 @@ async function main(): Promise<void> {
   const lastYear = Math.max(insee.meta.lastYear, bfs.meta.lastYear);
   const recentFrom = lastYear - RECENT_YEARS + 1;
   const origins = loadOrigins();
+  const meanings = loadMeanings();
   console.log(
-    `  last available year: ${lastYear}; recent window ${recentFrom}-${lastYear}; ${origins.size} curated origins`,
+    `  last available year: ${lastYear}; recent window ${recentFrom}-${lastYear}; ${origins.size} curated origins; ${meanings.size} curated meanings`,
   );
 
   const candidates: Candidate[] = [];
@@ -303,8 +315,11 @@ async function main(): Promise<void> {
       firstLetter: firstLetterOf(name),
       length: letterCount(name),
     };
-    const origin = origins.get(toMergeKey(name));
+    const key = toMergeKey(name);
+    const origin = origins.get(key);
     if (origin) entry.origin = origin;
+    const meaning = meanings.get(key);
+    if (meaning) entry.meaning = meaning;
     candidates.push({ entry, total, score: recentFR + CH_WEIGHT * recentCH });
   }
   console.log(
@@ -327,10 +342,19 @@ async function main(): Promise<void> {
   writeFileSync(namesPath, json, { encoding: 'utf8' });
   const sizeBytes = Buffer.byteLength(json, 'utf8');
 
-  const counts = { total: kept.length, f: 0, m: 0, x: 0, withOrigin: 0, withCH: 0 };
+  const counts = {
+    total: kept.length,
+    f: 0,
+    m: 0,
+    x: 0,
+    withOrigin: 0,
+    withMeaning: 0,
+    withCH: 0,
+  };
   for (const { entry } of kept) {
     counts[entry.gender]++;
     if (entry.origin) counts.withOrigin++;
+    if (entry.meaning) counts.withMeaning++;
     if (entry.countCH > 0) counts.withCH++;
   }
   const meta = {
@@ -366,7 +390,15 @@ async function main(): Promise<void> {
 function printSummary(
   kept: Candidate[],
   sizeBytes: number,
-  counts: { total: number; f: number; m: number; x: number; withOrigin: number; withCH: number },
+  counts: {
+    total: number;
+    f: number;
+    m: number;
+    x: number;
+    withOrigin: number;
+    withMeaning: number;
+    withCH: number;
+  },
 ): void {
   const top = (gender: Gender) =>
     kept
@@ -376,7 +408,7 @@ function printSummary(
       .join(', ');
   console.log('Summary');
   console.log(
-    `  names: ${counts.total} (f ${counts.f}, m ${counts.m}, x ${counts.x}); with CH data: ${counts.withCH}; with origin: ${counts.withOrigin}`,
+    `  names: ${counts.total} (f ${counts.f}, m ${counts.m}, x ${counts.x}); with CH data: ${counts.withCH}; with origin: ${counts.withOrigin}; with meaning: ${counts.withMeaning}`,
   );
   console.log(`  top 10 girls: ${top('f')}`);
   console.log(`  top 10 boys:  ${top('m')}`);

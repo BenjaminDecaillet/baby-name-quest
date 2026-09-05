@@ -27,7 +27,7 @@ const make = (name: string, partial: Partial<NameEntry> = {}): NameEntry => ({
 });
 
 const NAMES: NameEntry[] = [
-  make('Alice', { popularityRank: 1, origin: 'germanique' }),
+  make('Alice', { popularityRank: 1, origin: 'germanique', meaning: 'de noble lignée' }),
   make('Anaïs', { popularityRank: 2, trend: 'down' }),
   make('Arthur', { gender: 'm', popularityRank: 3, origin: 'celte' }),
   make('Camille', { gender: 'x', popularityRank: 4, origin: 'latin' }),
@@ -162,6 +162,39 @@ describe('ListPage', () => {
     expect(screen.queryByText('passé')).not.toBeInTheDocument();
   });
 
+  it('skips a name from the cross next to the heart and restores it', async () => {
+    const user = userEvent.setup();
+    const adapter = await seed();
+    await renderPage(adapter);
+
+    const cross = screen.getByRole('button', { name: 'Passer Zoé' });
+    expect(cross).toHaveAttribute('aria-pressed', 'false');
+    await user.click(cross);
+    const pressed = await screen.findByRole('button', { name: 'Reprendre Zoé' });
+    expect(pressed).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getAllByText('passé')).toHaveLength(2);
+    await waitFor(async () => {
+      const votes = await adapter.listVotes(COUPLE);
+      expect(votes).toContainEqual(
+        expect.objectContaining({ profileId: 'p1', nameId: 'zoe', value: 'skip' }),
+      );
+    });
+
+    // Skipping a liked name replaces the like.
+    await user.click(screen.getByRole('button', { name: 'Aimer Léa' }));
+    await screen.findByRole('button', { name: 'Retirer Léa de mes favoris' });
+    await user.click(screen.getByRole('button', { name: 'Passer Léa' }));
+    await screen.findByRole('button', { name: 'Aimer Léa' });
+
+    // The cross of a skipped name restores it.
+    await user.click(pressed);
+    await screen.findByRole('button', { name: 'Passer Zoé' });
+    await waitFor(async () => {
+      const votes = await adapter.listVotes(COUPLE);
+      expect(votes).not.toContainEqual(expect.objectContaining({ nameId: 'zoe' }));
+    });
+  });
+
   it('expands a row to show statistics and vote buttons', async () => {
     const user = userEvent.setup();
     await renderPage(await seed());
@@ -169,6 +202,7 @@ describe('ListPage', () => {
     expect(toggle).toHaveAttribute('aria-expanded', 'false');
     await user.click(toggle);
     expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByText('de noble lignée')).toBeInTheDocument();
     expect(screen.getByText('Naissances en France')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Je passe' }));
     expect(

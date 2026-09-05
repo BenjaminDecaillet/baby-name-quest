@@ -15,6 +15,8 @@ export interface NameEntry {
   firstLetter: string;
   length: number;
   origin?: string;
+  /** Short French meaning of the name (curated), e.g. « force de Dieu ». */
+  meaning?: string;
 }
 
 export interface NamesMeta {

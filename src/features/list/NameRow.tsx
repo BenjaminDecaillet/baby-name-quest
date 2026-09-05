@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { NameBadges, NameStats } from '../../components/NameBadges';
+import { NameBadges, NameMeaning, NameStats } from '../../components/NameBadges';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import type { NameEntry } from '../../data/types';
@@ -68,6 +68,17 @@ function NameRowComponent({
         </button>
         <button
           type="button"
+          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xl transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500 ${
+            skipped ? 'text-red-600 hover:bg-red-50' : 'text-stone-300 hover:bg-stone-100'
+          }`}
+          aria-pressed={skipped}
+          aria-label={skipped ? `Reprendre ${entry.name}` : `Passer ${entry.name}`}
+          onClick={() => (skipped ? onUnlike(entry.id) : onSkip(entry.id))}
+        >
+          <span aria-hidden="true">✕</span>
+        </button>
+        <button
+          type="button"
           className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-2xl transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500 ${
             liked ? 'text-rose-600 hover:bg-rose-50' : 'text-stone-300 hover:bg-stone-100'
           }`}
@@ -80,6 +91,7 @@ function NameRowComponent({
       </div>
       {expanded ? (
         <div id={detailsId} className="border-t border-stone-100 px-4 pt-3 pb-4">
+          <NameMeaning entry={entry} className="mb-3 text-sm" />
           <NameStats entry={entry} />
           <div className="mt-4 grid grid-cols-2 gap-2">
             <Button
