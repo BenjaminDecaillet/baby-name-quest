@@ -53,7 +53,8 @@ for (const relative of tracked) {
     if (pattern.test(text)) problems.push(`${relative}: token-like secret (${pattern})`);
   }
   const normalized = relative.replaceAll('\\', '/');
-  const isDataset = normalized.startsWith('public/data/') || normalized === 'data/origins.json';
+  // Curated tables (data/*.json) contain first names such as « Claude ».
+  const isDataset = normalized.startsWith('public/data/') || /^data\/[^/]+\.json$/.test(normalized);
   if (!SELF_REFERENCING.has(normalized) && !isDataset) {
     // Tooling paths requested by the repository owner are not "mentions".
     const prose = text.replaceAll(/CLAUDE\.md|\.claude\//g, '');
