@@ -19,7 +19,7 @@ Voir `docs/donnees.md` pour les URL exactes et les licences.
 
 ## Schéma d'un prénom
 `id`, `name`, `gender` (`f`|`m`|`x`), `countFR`, `countCH`, `recentFR`, `recentCH`,
-`popularityRank`, `trend` (`up`|`stable`|`down`), `firstLetter` (sans accent), `length`, `origin?`.
+`popularityRank`, `trend` (`up`|`stable`|`down`), `firstLetter` (sans accent), `length`, `origin?`, `meaning?`.
 
 ## Règles
 - Fusion insensible à la casse, accents conservés (« Zoé » ≠ « Zoe »).
@@ -28,6 +28,9 @@ Voir `docs/donnees.md` pour les URL exactes et les licences.
 - Popularité : score récent (5 dernières années) pondéré pour que la Suisse ne soit pas noyée.
 - Tendance : moyenne des 3 dernières années vs 10 ans plus tôt ; ±25 % → `up`/`down`, sinon `stable`.
 - Origine : table curatée `data/origins.json` (clé = prénom en minuscules, accents conservés).
+- Signification : table curatée `data/meanings.json`, même format et mêmes clés que les origines ;
+  valeur courte en français (≤ 80 caractères, sans point final), origine et signification restent
+  cohérentes entre elles.
 
 ## Vérifications après régénération
 - « Zoé », « Loïc », « Anaïs », « Noé » intacts ; « Luca » avec `countCH > 0`.
