@@ -41,6 +41,7 @@ communs, synchronisés entre deux appareils via un simple code de couple.
 | 11 | CI GitHub Actions (verify + déploiement Pages, `enablement: true`) | [x] fait | 52d3a9b |
 | 12 | Polish mobile, accessibilité, README FR (installation Windows) | [x] fait | 2db072c, 6cf39d8 |
 | 13 | PR finale ouverte ; Pages activé (site en ligne) ; secrets Actions Supabase à créer | [~] secrets en attente | — |
+| 14 | Découvrir : ordre alphabétique ; signification des prénoms (table `data/meanings.json`, carte et détails) | [x] fait | — |
 
 ## PROCHAINE ACTION
 Après fusion de la PR « ci(pages): deploy only from main », vérifier que le bundle en ligne
@@ -54,6 +55,11 @@ Consigner le résultat ici.
   fusion précédente) ne seront intégrés qu'au prochain build sur `main`.
 
 ## Journal
+- 2026-09-05 — Découvrir : puce « Alphabétique » (tri français insensible aux accents, mémorisé comme les
+  autres ordres). Signification des prénoms : table curatée `data/meanings.json` (1 199 prénoms, mêmes clés
+  que les origines), champ `meaning` généré par `build:names` (dataset régénéré à l'identique, 3,94 Mo),
+  affichée sous le prénom sur la carte et dans les détails de la liste. Vérifié dans Chromium (viewport
+  iPhone, aucune erreur console) ; `npm run verify` vert (86 tests).
 - 2026-09-04 — Démarrage. Repo vide. Socle en cours (hygiène, hooks, commandes, skills, scaffold).
   Sous-agent lancé sur le pipeline de données.
 - 2026-09-04 — Livré : socle, hooks, scaffold, dataset INSEE+OFS (22 870 prénoms), couche données,
