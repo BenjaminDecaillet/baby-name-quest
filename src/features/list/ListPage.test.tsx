@@ -27,7 +27,7 @@ const make = (name: string, partial: Partial<NameEntry> = {}): NameEntry => ({
 });
 
 const NAMES: NameEntry[] = [
-  make('Alice', { popularityRank: 1, origin: 'germanique' }),
+  make('Alice', { popularityRank: 1, origin: 'germanique', meaning: 'de noble lignée' }),
   make('Anaïs', { popularityRank: 2, trend: 'down' }),
   make('Arthur', { gender: 'm', popularityRank: 3, origin: 'celte' }),
   make('Camille', { gender: 'x', popularityRank: 4, origin: 'latin' }),
@@ -169,6 +169,7 @@ describe('ListPage', () => {
     expect(toggle).toHaveAttribute('aria-expanded', 'false');
     await user.click(toggle);
     expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByText('de noble lignée')).toBeInTheDocument();
     expect(screen.getByText('Naissances en France')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Je passe' }));
     expect(

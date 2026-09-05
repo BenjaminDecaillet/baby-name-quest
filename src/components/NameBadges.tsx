@@ -30,6 +30,18 @@ export function NameBadges({ entry, compact = false }: { entry: NameEntry; compa
   );
 }
 
+/** Meaning of the name, when the curated table knows it. */
+export function NameMeaning({ entry, className = '' }: { entry: NameEntry; className?: string }) {
+  if (!entry.meaning) return null;
+  return (
+    <p className={`text-stone-600 ${className}`}>
+      <span className="sr-only">Signification : </span>
+      <span aria-hidden="true">✨ </span>
+      <span className="italic">{entry.meaning}</span>
+    </p>
+  );
+}
+
 /** Detailed statistics block shown on the swipe card and in details views. */
 export function NameStats({ entry }: { entry: NameEntry }) {
   return (

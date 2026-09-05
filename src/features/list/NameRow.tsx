@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { NameBadges, NameStats } from '../../components/NameBadges';
+import { NameBadges, NameMeaning, NameStats } from '../../components/NameBadges';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import type { NameEntry } from '../../data/types';
@@ -80,6 +80,7 @@ function NameRowComponent({
       </div>
       {expanded ? (
         <div id={detailsId} className="border-t border-stone-100 px-4 pt-3 pb-4">
+          <NameMeaning entry={entry} className="mb-3 text-sm" />
           <NameStats entry={entry} />
           <div className="mt-4 grid grid-cols-2 gap-2">
             <Button
