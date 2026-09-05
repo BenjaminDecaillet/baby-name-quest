@@ -63,7 +63,7 @@ Consigner le résultat ici.
   iPhone, aucune erreur console) ; `npm run verify` vert (86 tests).
 - 2026-09-05 — Liste : croix « Passer <prénom> » à côté du cœur (rouge quand le prénom est passé, un second
   appui le reprend). `check:repo` exempte désormais toutes les tables `data/*.json`, dont les significations
-  qui citent le prénom Claude. `npm run verify` vert (87 tests).
+  qui citent des prénoms bloqués par le motif interdit. `npm run verify` vert (87 tests).
 - 2026-09-04 — Démarrage. Repo vide. Socle en cours (hygiène, hooks, commandes, skills, scaffold).
   Sous-agent lancé sur le pipeline de données.
 - 2026-09-04 — Livré : socle, hooks, scaffold, dataset INSEE+OFS (22 870 prénoms), couche données,
