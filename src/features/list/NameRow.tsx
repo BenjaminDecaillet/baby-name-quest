@@ -68,6 +68,17 @@ function NameRowComponent({
         </button>
         <button
           type="button"
+          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xl transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500 ${
+            skipped ? 'text-red-600 hover:bg-red-50' : 'text-stone-300 hover:bg-stone-100'
+          }`}
+          aria-pressed={skipped}
+          aria-label={skipped ? `Reprendre ${entry.name}` : `Passer ${entry.name}`}
+          onClick={() => (skipped ? onUnlike(entry.id) : onSkip(entry.id))}
+        >
+          <span aria-hidden="true">✕</span>
+        </button>
+        <button
+          type="button"
           className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-2xl transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500 ${
             liked ? 'text-rose-600 hover:bg-rose-50' : 'text-stone-300 hover:bg-stone-100'
           }`}
