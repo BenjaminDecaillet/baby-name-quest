@@ -38,6 +38,7 @@ function entry(id: string, name: string, gender: NameEntry['gender'], rank: numb
     firstLetter: name.charAt(0).toUpperCase(),
     length: name.length,
     origin: rank === 1 ? 'hébraïque' : undefined,
+    meaning: rank === 1 ? 'universelle, entière' : undefined,
   };
 }
 
@@ -106,6 +107,7 @@ describe('SwipePage', () => {
     expect(screen.getByText('Fille')).toBeInTheDocument();
     expect(screen.getAllByText('En hausse').length).toBeGreaterThan(0);
     expect(screen.getByText('Origine hébraïque')).toBeInTheDocument();
+    expect(screen.getByText('universelle, entière')).toBeInTheDocument();
     expect(screen.getByText('Naissances en France')).toBeInTheDocument();
     expect(screen.getByText('0 / 3 prénoms vus')).toBeInTheDocument();
     expect(screen.getByRole('progressbar', { name: 'Progression' })).toHaveAttribute(
@@ -257,6 +259,35 @@ describe('SwipePage', () => {
       'aria-pressed',
       'true',
     );
+  });
+
+  it('offers an alphabetical order that survives a reload', async () => {
+    const user = userEvent.setup();
+    const adapter = await seedAdapter();
+    const first = renderPage(adapter);
+    await screen.findByRole('heading', { name: 'Emma' });
+    await user.click(screen.getByRole('button', { name: 'Alphabétique' }));
+    expect(screen.getByRole('button', { name: 'Alphabétique' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    expect(await screen.findByRole('heading', { name: 'Camille' })).toBeInTheDocument();
+    expect(window.localStorage.getItem('bnq.swipe.order')).toBe('alpha');
+
+    await user.click(screen.getByRole('button', { name: 'Je passe' }));
+    expect(await screen.findByRole('heading', { name: 'Emma' })).toBeInTheDocument();
+    first.unmount();
+
+    renderPage(adapter);
+    expect(await screen.findByRole('heading', { name: 'Emma' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Alphabétique' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await user.click(screen.getByRole('button', { name: 'Popularité' }));
+    expect(await screen.findByRole('heading', { name: 'Emma' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: "J'aime" }));
+    expect(await screen.findByRole('heading', { name: 'Louis' })).toBeInTheDocument();
   });
 
   it('shows a spinner while loading and a message on error', async () => {

@@ -13,6 +13,7 @@ import { SwipeActions } from './SwipeActions';
 import { SwipeProgress } from './SwipeProgress';
 import {
   ORDER_LABELS,
+  QUEUE_ORDERS,
   buildPool,
   buildQueue,
   computeProgress,
@@ -24,8 +25,6 @@ import {
   type QueueOrder,
 } from './swipeQueue';
 import { usePrefersReducedMotion, type SwipeDirection } from './useSwipeGesture';
-
-const ORDERS: QueueOrder[] = ['popularity', 'shuffle'];
 
 interface Ghost {
   key: number;
@@ -158,7 +157,7 @@ export function SwipePage() {
       <h1 className="sr-only">Découvrir des prénoms</h1>
       <div className="flex items-center justify-between gap-3">
         <div role="group" aria-label="Ordre des prénoms" className="flex flex-wrap gap-1.5">
-          {ORDERS.map((option) => (
+          {QUEUE_ORDERS.map((option) => (
             <Chip
               key={option}
               selected={order === option}

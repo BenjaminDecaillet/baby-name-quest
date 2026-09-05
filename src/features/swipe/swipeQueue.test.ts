@@ -86,6 +86,46 @@ describe('buildQueue', () => {
   });
 });
 
+describe('orderPool', () => {
+  const pool = buildPool(
+    [
+      ...NAMES,
+      entry('éloïse', 'f', 6),
+      entry('elsa', 'f', 7),
+      entry('zoe', 'f', 9),
+      entry('zoé', 'f', 8),
+    ],
+    'both',
+  );
+
+  it('keeps the popularity order by default', () => {
+    expect(orderPool(pool, 'popularity', '').map((item) => item.id)).toEqual(
+      pool.map((item) => item.id),
+    );
+  });
+
+  it('sorts alphabetically ignoring accents, most popular homograph first', () => {
+    expect(orderPool(pool, 'alpha', '').map((item) => item.id)).toEqual([
+      'camille',
+      'éloïse',
+      'elsa',
+      'emma',
+      'gabriel',
+      'jade',
+      'louis',
+      'zoé',
+      'zoe',
+    ]);
+  });
+
+  it('does not mutate the pool', () => {
+    const copy = [...pool];
+    orderPool(pool, 'alpha', '');
+    orderPool(pool, 'shuffle', 'seed');
+    expect(pool).toEqual(copy);
+  });
+});
+
 describe('seededShuffle', () => {
   const items = Array.from({ length: 50 }, (_, index) => index);
 
@@ -157,6 +197,13 @@ describe('persistence helpers', () => {
     writeOrder('shuffle');
     expect(window.localStorage.getItem(ORDER_KEY)).toBe('shuffle');
     expect(readOrder()).toBe('shuffle');
+    writeOrder('alpha');
+    expect(readOrder()).toBe('alpha');
+  });
+
+  it('falls back to popularity on an unknown stored value', () => {
+    window.localStorage.setItem(ORDER_KEY, 'random');
+    expect(readOrder()).toBe('popularity');
   });
 
   it('creates the shuffle seed once and reuses it', () => {
